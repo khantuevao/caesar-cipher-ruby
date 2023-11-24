@@ -1,34 +1,32 @@
+# Take a string & a factor
 def caesar_cipher(string, factor)
-  # Convert string into array of ASCII values
-  array = string.bytes
+  # Convert string to array
+  char_array = string.split('')
 
-  # Shift it by the factor
-  array.map! do |val|
-    # If a value is between 'a-z'
-    if val.between?(97, 122)
-      val += factor
-    # If a value is between 'A-Z'
-    elsif val.between?(65, 90)
-      val += factor
+  # Convert chararcters to ord 
+  ord_array = char_array.collect { |char| char.ord }
+
+  # Shift each ord by a factor if it is a letter
+  shifted_ord_array = ord_array.collect do |ord|
+    if 65 <= ord && ord <= 90 || 97 <= ord && ord <= 122
+        ord += factor
     else
-      val = val
+        ord
     end
   end
 
   # Wrap
-  array.map! do |val|
-    # If a value is greater than 'z' => wrap to 'a'
-    if val > 122
-      val = val - 122 + 97
-    # If a value is greater than 'Z' => wrap to 'A'
-    elsif val.between?(91, 96)
-      val = val - 90 + 65 - 1
+  wrapped_ord_array = shifted_ord_array.collect do |ord|
+  # from z to a
+    if ord > 122
+        ord = ord - 122 + 97
+  # from Z to A
+    elsif ord.between?(91, 96)
+        ord = ord - 90 + 65 - 1
     else
-      val = val
+        ord = ord
     end
   end
-
-  # Convert array back to string
-  new_array = array.pack('c*')
-  new_array
+  # Convert ord to characters & Join the shifted characters array
+  wrapped_ord_array.collect { |ord| ord.chr }.join
 end
